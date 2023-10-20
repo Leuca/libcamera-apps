@@ -1,0 +1,11 @@
+function get_version_lead {
+    ver=$(cat meson.build | grep " version" | cut -d"'" -f 2)
+    lead=${ver:0:3}
+    echo -n "$lead"
+}
+
+function get_version_follow {
+    ver=$(cat meson.build | grep " version" | cut -d"'" -f 2)
+    follow=${ver:4:5}
+    echo -n "$follow"
+}

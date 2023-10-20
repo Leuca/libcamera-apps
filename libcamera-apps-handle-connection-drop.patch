@@ -1,0 +1,61 @@
+diff --git a/encoder/libav_encoder.cpp b/encoder/libav_encoder.cpp
+index 6d8065a..ee81fe0 100644
+--- a/encoder/libav_encoder.cpp
++++ b/encoder/libav_encoder.cpp
+@@ -14,6 +14,7 @@
+ #include <linux/videodev2.h>
+ 
+ #include <chrono>
++#include <csignal>
+ #include <iostream>
+ 
+ #include "libav_encoder.hpp"
+@@ -463,7 +464,13 @@ void LibAvEncoder::encode(AVPacket *pkt, unsigned int stream_id)
+ 		// This would be different if one used av_write_frame().
+ 		ret = av_interleaved_write_frame(out_fmt_ctx_, pkt);
+ 		if (ret < 0)
+-			throw std::runtime_error("libav: error writing output: " + std::to_string(ret));
++		{
++			// This means the connection suddenly dropped, handle gracefully
++			if (ret == -104 || ret == -32)
++				std::raise(SIGPIPE);
++			else
++				throw std::runtime_error("libav: error writing output: " + std::to_string(ret));
++		}
+ 	}
+ }
+ 
+diff --git a/output/net_output.cpp b/output/net_output.cpp
+index 6c3fe93..26e07bb 100644
+--- a/output/net_output.cpp
++++ b/output/net_output.cpp
+@@ -8,6 +8,9 @@
+ #include <arpa/inet.h>
+ #include <sys/socket.h>
+ 
++#include <csignal>
++#include <cerrno>
++
+ #include "net_output.hpp"
+ 
+ NetOutput::NetOutput(VideoOptions const *options) : Output(options)
+@@ -105,8 +108,18 @@ void NetOutput::outputBuffer(void *mem, size_t size, int64_t /*timestamp_us*/, u
+ 	for (uint8_t *ptr = (uint8_t *)mem; size;)
+ 	{
+ 		size_t bytes_to_send = std::min(size, max_size);
++
+ 		if (sendto(fd_, ptr, bytes_to_send, 0, saddr_ptr_, sockaddr_in_size_) < 0)
+-			throw std::runtime_error("failed to send data on socket");
++		{
++			if (errno != EPIPE)
++			{
++				if (errno == ECONNRESET)
++					std::raise(SIGPIPE);
++				else
++					throw std::runtime_error("failed to send data on socket");
++			}
++		}
++
+ 		ptr += bytes_to_send;
+ 		size -= bytes_to_send;
+ 	}
