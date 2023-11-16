@@ -15,7 +15,7 @@ ExclusiveArch:  %{arm} aarch64
 
 Source:         {{{ git_dir_pack }}}
 
-Patch0:         libcamera-apps-handle-connection-drop.patch
+Patch0:         rpicam-apps-handle-connection-drop.patch
 
 BuildRequires:  git
 BuildRequires:  cmake
