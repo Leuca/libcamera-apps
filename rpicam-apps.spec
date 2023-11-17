@@ -87,6 +87,7 @@ sed -i '/meson_version/d' meson.build
 %files
 %license license.txt
 %{_bindir}/rpicam-*
+%{_bindir}/libcamera-*
 %{_bindir}/camera-bug-report
 
 %files libs
@@ -94,7 +95,9 @@ sed -i '/meson_version/d' meson.build
 
 %files devel
 %{_libdir}/rpicam_app.so
+%{_libdir}/libcamera_app.so
 %{_includedir}/%{name}
+%{_includedir}/libcamera-apps
 
 %changelog
 {{{ git_dir_changelog }}}
