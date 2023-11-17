@@ -45,13 +45,13 @@ Requires:       libcamera-ipa
 This is a small suite of libcamera-based apps that aim to copy the functionality of the existing "raspicam" apps.
 
 %package libs
-Summary:        Libraries needed by libcamera-apps
+Summary:        Libraries needed by rpicam-apps
 
 %description libs
 Libraries for a small suite of libcamera-based apps that aim to copy the functionality of the existing "raspicam" apps.
 
 %package devel
-Summary:        Development files for libcamera-apps-libs
+Summary:        Development files for rpicam-apps-libs
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 %description devel
@@ -86,14 +86,14 @@ sed -i '/meson_version/d' meson.build
 
 %files
 %license license.txt
-%{_bindir}/libcamera-*
+%{_bindir}/rpicam-*
 %{_bindir}/camera-bug-report
 
 %files libs
-%{_libdir}/libcamera_app.so.*
+%{_libdir}/rpicam_app.so.*
 
 %files devel
-%{_libdir}/libcamera_app.so
+%{_libdir}/rpicam_app.so
 %{_includedir}/%{name}
 
 %changelog
