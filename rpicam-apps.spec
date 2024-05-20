@@ -92,6 +92,8 @@ sed -i '/meson_version/d' meson.build
 
 %files libs
 %{_libdir}/rpicam_app.so.*
+%{_libdir}/rpicam-apps-postproc/core-postproc.so
+%{_libdir}/rpicam-apps-postproc/opencv-postproc.so
 
 %files devel
 %{_libdir}/rpicam_app.so
