@@ -66,12 +66,12 @@ Development files for a small suite of libcamera-based apps that aim to copy the
 sed -i '/meson_version/d' meson.build
 
 %meson --buildtype=release \
-             -Denable_libav=true \
-             -Denable_drm=true \
-             -Denable_egl=true \
-             -Denable_qt=false \
-             -Denable_opencv=true \
-             -Denable_tflite=false \
+             -Denable_libav=enabled \
+             -Denable_drm=enabled \
+             -Denable_egl=enabled \
+             -Denable_qt=disabled \
+             -Denable_opencv=enabled \
+             -Denable_tflite=disabled \
 %ifarch %{arm}
              -Dneon_flags=armv8-neon
 %endif
