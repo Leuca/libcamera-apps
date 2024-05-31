@@ -72,6 +72,7 @@ sed -i '/meson_version/d' meson.build
              -Denable_qt=disabled \
              -Denable_opencv=enabled \
              -Denable_tflite=disabled \
+             -Denable_hailo=disabled \
 %ifarch %{arm}
              -Dneon_flags=armv8-neon
 %endif
